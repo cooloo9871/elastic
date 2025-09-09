@@ -1,0 +1,64 @@
+[
+  {
+    "op": "add",
+    "path": "/spec/nodeSets/0/podTemplate",
+    "value": {
+      "spec": {
+        "tolerations": []
+      }
+    }
+  },
+  {
+    "op": "add",
+    "path": "/spec/http",
+    "value": {
+      "service": {
+        "spec": {
+          "type": "NodePort"
+        }
+      }
+    }
+  },
+  {
+    "op": "add",
+    "path": "/spec/nodeSets/0/podTemplate/spec/tolerations",
+    "value": [
+      {
+        "key": "node-role.kubernetes.io/control-plane",
+        "operator": "Exists",
+        "effect": "NoSchedule"
+      },
+      {
+        "key": "node-role.kubernetes.io/control-plane",
+        "operator": "Exists",
+        "effect": "NoExecute"
+      }
+    ]
+  },
+  {
+    "op": "add",
+    "path": "/spec/nodeSets/1/podTemplate",
+    "value": {
+      "spec": {
+        "tolerations": []
+      }
+    }
+  },
+  {
+    "op": "add",
+    "path": "/spec/nodeSets/1/podTemplate/spec/tolerations",
+    "value": [
+      {
+        "key": "node-role.kubernetes.io/control-plane",
+        "operator": "Exists",
+        "effect": "NoSchedule"
+      },
+      {
+        "key": "node-role.kubernetes.io/control-plane",
+        "operator": "Equal",
+        "value": "Exists",
+        "effect": "NoExecute"
+      }
+    ]
+  }
+]
