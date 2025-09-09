@@ -2,6 +2,7 @@ apiVersion: elasticsearch.k8s.elastic.co/v1
 kind: Elasticsearch
 metadata:
   name: elasticsearch
+  namespace: elastic
 spec:
   version: 8.16.1
   image: docker.elastic.co/elasticsearch/elasticsearch:8.16.1
