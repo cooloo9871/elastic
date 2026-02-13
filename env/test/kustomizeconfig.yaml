@@ -1,0 +1,5 @@
+images:
+- kind: Elasticsearch
+  path: spec/image
+- kind: Kibana
+  path: spec/image
