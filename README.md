@@ -32,6 +32,9 @@ kind: Kustomization
 resources:
 - ../../base
 
+configurations:
+- kustomizeconfig.yaml
+
 # 使用 images 區塊統一管理版本
 images:
   # 修改 ECK Operator 版本
