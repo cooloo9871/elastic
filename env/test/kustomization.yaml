@@ -7,17 +7,17 @@ resources:
 images:
   # 修改 ECK Operator 版本
   - name: docker.elastic.co/eck/eck-operator
-    newName: docph01.cbsd.scsb.com.tw/ocp4/elk/eck-operator
+    newName: docker.elastic.co/eck/eck-operator
     newTag: 2.16.1
 
   # 修改 Elasticsearch 版本
   - name: docker.elastic.co/elasticsearch/elasticsearch
-    newName: docph01.cbsd.scsb.com.tw/ocp4/elk/elasticsearch
+    newName: docker.elastic.co/elasticsearch/elasticsearch
     newTag: 8.17.0
 
   # 修改 Kibana 版本
   - name: docker.elastic.co/kibana/kibana
-    newName: docph01.cbsd.scsb.com.tw/ocp4/elk/kibana
+    newName: docker.elastic.co/kibana/kibana
     newTag: 8.17.0
 
 patches:
