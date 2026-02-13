@@ -32,10 +32,22 @@ kind: Kustomization
 resources:
 - ../../base
 
-#images:
-#- name: docker.elastic.co/eck/eck-operator:3.0.0
-#  newName: docph01.cbsd.scsb.com.tw/ocp4/elk/eck-operator
-#  newTag: 3.0.0
+# 使用 images 區塊統一管理版本
+images:
+  # 修改 ECK Operator 版本
+  - name: docker.elastic.co/eck/eck-operator
+    newName: docker.elastic.co/eck/eck-operator
+    newTag: 2.16.1
+
+  # 修改 Elasticsearch 版本
+  - name: docker.elastic.co/elasticsearch/elasticsearch
+    newName: docker.elastic.co/elasticsearch/elasticsearch
+    newTag: 8.17.0
+
+  # 修改 Kibana 版本
+  - name: docker.elastic.co/kibana/kibana
+    newName: docker.elastic.co/kibana/kibana
+    newTag: 8.17.0
 patches:
 - patch: |-
     - op: replace
