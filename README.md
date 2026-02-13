@@ -93,6 +93,9 @@ patchesStrategicMerge:
 
 * 先部署 CRD
 ```
+# 如果版本有變更，CRD 也要變更
+$ curl -o base/resource/crds.yaml https://download.elastic.co/downloads/eck/3.3.0/crds.yaml
+
 $ kubectl apply -f base/resource/crds.yaml
 ```
 
