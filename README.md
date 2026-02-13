@@ -35,37 +35,57 @@ resources:
 configurations:
 - kustomizeconfig.yaml
 
+commonLabels:
+  # 根據 ECK Operator 版本修改一致
+  app.kubernetes.io/version: "3.3.0"
+
 # 使用 images 區塊統一管理版本
 images:
   # 修改 ECK Operator 版本
   - name: docker.elastic.co/eck/eck-operator
     newName: docker.elastic.co/eck/eck-operator
-    newTag: 2.16.1
+    newTag: 3.3.0
 
   # 修改 Elasticsearch 版本
-  - name: docker.elastic.co/elasticsearch/elasticsearch
+  - name: docker.elastic.co/elasticsearch/elasticsearch:8.16.1
     newName: docker.elastic.co/elasticsearch/elasticsearch
-    newTag: 8.17.0
+    newTag: 9.3.0
 
   # 修改 Kibana 版本
-  - name: docker.elastic.co/kibana/kibana
+  - name: docker.elastic.co/kibana/kibana:8.16.1
     newName: docker.elastic.co/kibana/kibana
-    newTag: 8.17.0
+    newTag: 9.3.0
+
 patches:
 - patch: |-
     - op: replace
+      path: /spec/version
+      # 根據 Elasticsearch 版本修改一致
+      value: 9.3.0
+  target:
+    kind: Elasticsearch
+    name: elasticsearch
+- patch: |-
+    - op: replace
       path: /spec/nodeSets/0/volumeClaimTemplates/0/spec/storageClassName
-      value: nfs-delete              # 修改 csi 名稱
+      value: nfs-csi
   target:
     kind: Elasticsearch
     name: elasticsearch
 - patch: |-
     - op: replace
       path: /spec/nodeSets/1/volumeClaimTemplates/0/spec/storageClassName
-      value: nfs-delete              # 修改 csi 名稱
+      value: nfs-csi
   target:
     kind: Elasticsearch
     name: elasticsearch
+
+- target:
+    group: elasticsearch.k8s.elastic.co
+    version: v1
+    kind: Elasticsearch
+    name: elasticsearch
+  path: elastic-tolerations.json
 
 patchesStrategicMerge:
   - kibana-patch.yaml
