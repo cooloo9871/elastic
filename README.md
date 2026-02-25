@@ -134,3 +134,11 @@ elasticsearch-es-master-nodes-1   1/1     Running   0          12m
 elasticsearch-es-master-nodes-2   1/1     Running   0          12m
 kibana-kb-54fcdb8d77-thbcq        1/1     Running   0          12m
 ```
+```
+$ kubectl -n elastic get elastic
+NAME                                                       HEALTH   NODES   VERSION   PHASE   AGE
+elasticsearch.elasticsearch.k8s.elastic.co/elasticsearch   green    6       9.3.0     Ready   6m8s
+
+NAME                                  HEALTH   NODES   VERSION   AGE
+kibana.kibana.k8s.elastic.co/kibana   green    1       9.3.0     6m8s
+```
