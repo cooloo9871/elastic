@@ -65,6 +65,14 @@ patches:
   target:
     kind: Elasticsearch
     name: elasticsearch
+  # 根據 Kibana 版本修改一致
+- patch: |-
+    - op: replace
+      path: /spec/version
+      value: 9.3.0
+  target:
+    kind: Kibana
+    name: kibana
 - patch: |-
     - op: replace
       path: /spec/nodeSets/0/volumeClaimTemplates/0/spec/storageClassName
