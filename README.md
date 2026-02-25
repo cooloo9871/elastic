@@ -98,7 +98,10 @@ patches:
 patchesStrategicMerge:
   - kibana-patch.yaml
 ```
-
+* 如果換先版本就要先更新 operator 版本的 yaml
+```
+$ wget https://download.elastic.co/downloads/eck/3.3.0/operator.yaml -O base/resource/operator.yaml
+```
 * 先部署 CRD
 ```
 # 如果版本有變更，CRD 也要變更
