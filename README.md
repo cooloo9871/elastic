@@ -65,7 +65,18 @@ patches:
   target:
     kind: Elasticsearch
     name: elasticsearch
-  # 根據 Kibana 版本修改一致
+# Elasticsearch 對外接收 log svc 設為 LoadBalancer
+- patch: |-
+    - op: add
+      path: /spec/http
+      value:
+        service:
+          spec:
+            type: LoadBalancer
+  target:
+    kind: Elasticsearch
+    name: elasticsearch
+# 根據 Kibana 版本修改一致
 - patch: |-
     - op: replace
       path: /spec/version
@@ -77,6 +88,9 @@ patches:
     - op: replace
       path: /spec/nodeSets/0/volumeClaimTemplates/0/spec/storageClassName
       value: nfs-csi
+    - op: replace
+      path: /spec/nodeSets/0/volumeClaimTemplates/0/spec/resources/requests/storage
+      value: 10Gi
   target:
     kind: Elasticsearch
     name: elasticsearch
@@ -84,6 +98,9 @@ patches:
     - op: replace
       path: /spec/nodeSets/1/volumeClaimTemplates/0/spec/storageClassName
       value: nfs-csi
+    - op: replace
+      path: /spec/nodeSets/1/volumeClaimTemplates/0/spec/resources/requests/storage
+      value: 200Gi
   target:
     kind: Elasticsearch
     name: elasticsearch
