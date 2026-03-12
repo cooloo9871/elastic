@@ -27,7 +27,3 @@ spec:
       - effect: NoExecute
         key: node-role.kubernetes.io/control-plane
         operator: Exists
-  http:
-    service:
-      spec:
-        type: "NodePort"
