@@ -12,13 +12,13 @@ commonLabels:
 
 images:
   - name: docker.elastic.co/eck/eck-operator
-    newName: harbor.k8sexample.com/tkg/eck-operator
+    newName: docker.elastic.co/eck/eck-operator
     newTag: 3.3.0
   - name: docker.elastic.co/elasticsearch/elasticsearch:8.16.1
-    newName: harbor.k8sexample.com/tkg/elasticsearch
+    newName: docker.elastic.co/elasticsearch/elasticsearch
     newTag: 9.3.0
   - name: docker.elastic.co/kibana/kibana:8.16.1
-    newName: harbor.k8sexample.com/tkg/kibana
+    newName: docker.elastic.co/kibana/kibana
     newTag: 9.3.0
 
 patches:
@@ -74,15 +74,6 @@ patches:
       group: kibana.k8s.elastic.co
       kind: Kibana
       name: kibana
-  - patch: |-
-      - op: add
-        path: /spec/template/spec/imagePullSecrets
-        value:
-          - name: harbor-registry-secret
-    target:
-      kind: StatefulSet
-      name: elastic-operator
-
   - target:
       group: elasticsearch.k8s.elastic.co
       version: v1
