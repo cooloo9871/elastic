@@ -29,88 +29,86 @@ nfs-delete   nfs.csi.k8s.io   Delete          Immediate           false         
 $ nano env/test/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+
 resources:
-- ../../base
+  - ../../base
 
 configurations:
-- kustomizeconfig.yaml
+  - kustomizeconfig.yaml
 
 commonLabels:
-  # 根據 ECK Operator 版本修改一致
   app.kubernetes.io/version: "3.3.0"
 
-# 使用 images 區塊統一管理版本
 images:
-  # 修改 ECK Operator 版本
   - name: docker.elastic.co/eck/eck-operator
     newName: docker.elastic.co/eck/eck-operator
     newTag: 3.3.0
-
-  # 修改 Elasticsearch 版本
   - name: docker.elastic.co/elasticsearch/elasticsearch:8.16.1
     newName: docker.elastic.co/elasticsearch/elasticsearch
     newTag: 9.3.0
-
-  # 修改 Kibana 版本
   - name: docker.elastic.co/kibana/kibana:8.16.1
     newName: docker.elastic.co/kibana/kibana
     newTag: 9.3.0
 
 patches:
-- patch: |-
-    - op: replace
-      path: /spec/version
-      # 根據 Elasticsearch 版本修改一致
-      value: 9.3.0
-  target:
-    kind: Elasticsearch
-    name: elasticsearch
-# Elasticsearch 對外接收 log svc 設為 LoadBalancer
-- patch: |-
-    - op: add
-      path: /spec/http
-      value:
-        service:
-          spec:
-            type: LoadBalancer
-  target:
-    kind: Elasticsearch
-    name: elasticsearch
-# 根據 Kibana 版本修改一致
-- patch: |-
-    - op: replace
-      path: /spec/version
-      value: 9.3.0
-  target:
-    kind: Kibana
-    name: kibana
-- patch: |-
-    - op: replace
-      path: /spec/nodeSets/0/volumeClaimTemplates/0/spec/storageClassName
-      value: nfs-csi
-    - op: replace
-      path: /spec/nodeSets/0/volumeClaimTemplates/0/spec/resources/requests/storage
-      value: 10Gi
-  target:
-    kind: Elasticsearch
-    name: elasticsearch
-- patch: |-
-    - op: replace
-      path: /spec/nodeSets/1/volumeClaimTemplates/0/spec/storageClassName
-      value: nfs-csi
-    - op: replace
-      path: /spec/nodeSets/1/volumeClaimTemplates/0/spec/resources/requests/storage
-      value: 200Gi
-  target:
-    kind: Elasticsearch
-    name: elasticsearch
-
-- target:
-    group: elasticsearch.k8s.elastic.co
-    version: v1
-    kind: Elasticsearch
-    name: elasticsearch
-  path: elastic-tolerations.json
+  - patch: |-
+      - op: replace
+        path: /spec/version
+        # 根據 Elasticsearch 版本修改一致
+        value: 9.3.0
+      - op: add
+        path: /spec/http
+        value:
+          service:
+            spec:
+              type: LoadBalancer
+              # 接收 log 的對外 ip
+              loadBalancerIP: 10.10.7.82
+    target:
+      kind: Elasticsearch
+      name: elasticsearch
+  - patch: |-
+      - op: replace
+        path: /spec/nodeSets/0/volumeClaimTemplates/0/spec/storageClassName
+        value: nfs-csi
+      - op: replace
+        path: /spec/nodeSets/0/volumeClaimTemplates/0/spec/resources/requests/storage
+        value: 10Gi
+    target:
+      kind: Elasticsearch
+      name: elasticsearch
+  - patch: |-
+      - op: replace
+        path: /spec/nodeSets/1/volumeClaimTemplates/0/spec/storageClassName
+        value: nfs-csi
+      - op: replace
+        path: /spec/nodeSets/1/volumeClaimTemplates/0/spec/resources/requests/storage
+        value: 200Gi
+    target:
+      kind: Elasticsearch
+      name: elasticsearch
+  - patch: |-
+      - op: replace
+        path: /spec/version
+        value: 9.3.0
+      - op: add
+        path: /spec/http
+        value:
+          service:
+            spec:
+              type: LoadBalancer
+              # Kibana UI 對外 ip
+              loadBalancerIP: 10.10.7.83
+    target:
+      group: kibana.k8s.elastic.co
+      kind: Kibana
+      name: kibana
+  - target:
+      group: elasticsearch.k8s.elastic.co
+      version: v1
+      kind: Elasticsearch
+      name: elasticsearch
+    path: elastic-tolerations.json
 
 patchesStrategicMerge:
   - kibana-patch.yaml
